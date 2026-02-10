@@ -3,9 +3,9 @@
   "description": "MikroORM entity design, migrations, query patterns, and best practices",
   "version": "0.1.0",
   "author": {
-    "name": "Your Name"
+    "name": "Julian Wulff"
   },
-  "repository": "https://github.com/your-org/skills",
+  "repository": "https://github.com/jsonwulff/skills",
   "license": "MIT",
   "keywords": ["mikro-orm", "orm", "database", "entities", "migrations", "typescript"]
 }
