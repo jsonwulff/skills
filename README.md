@@ -45,28 +45,35 @@ npx skills add your-org/skills -l
 
 ### superpowers plugin
 
-| Skill | Description |
-|-------|-------------|
-| `brainstorming` | Collaborative design exploration before implementation |
-| `writing-plans` | Comprehensive implementation plans with TDD |
-| `systematic-debugging` | Observe, hypothesize, test, fix — never guess |
-| `test-driven-development` | Red-Green-Refactor cycle |
-| `verification-before-completion` | Prove it works before claiming it does |
-| `dispatching-parallel-agents` | Run independent tasks concurrently |
-| `executing-plans` | Task-by-task plan execution with checkpoints |
-| `finishing-a-development-branch` | Merge, PR, or cleanup options |
-| `requesting-code-review` | Systematic review before merging |
-| `receiving-code-review` | Technical rigor when processing feedback |
-| `writing-skills` | Guide for creating SKILL.md files |
-| `subagent-driven-development` | Subagent per task with code review |
-| `using-git-worktrees` | Isolated workspaces for feature work |
-| `using-superpowers` | Skill discovery and invocation |
+| Skill                            | Description                                            |
+| -------------------------------- | ------------------------------------------------------ |
+| `brainstorming`                  | Collaborative design exploration before implementation |
+| `writing-plans`                  | Comprehensive implementation plans with TDD            |
+| `systematic-debugging`           | Observe, hypothesize, test, fix — never guess          |
+| `test-driven-development`        | Red-Green-Refactor cycle                               |
+| `verification-before-completion` | Prove it works before claiming it does                 |
+| `dispatching-parallel-agents`    | Run independent tasks concurrently                     |
+| `executing-plans`                | Task-by-task plan execution with checkpoints           |
+| `finishing-a-development-branch` | Merge, PR, or cleanup options                          |
+| `requesting-code-review`         | Systematic review before merging                       |
+| `receiving-code-review`          | Technical rigor when processing feedback               |
+| `writing-skills`                 | Guide for creating SKILL.md files                      |
+| `subagent-driven-development`    | Subagent per task with code review                     |
+| `using-git-worktrees`            | Isolated workspaces for feature work                   |
+| `using-superpowers`              | Skill discovery and invocation                         |
 
 ### mikro-orm plugin
 
-| Skill | Description |
-|-------|-------------|
+| Skill       | Description                                               |
+| ----------- | --------------------------------------------------------- |
 | `mikro-orm` | Entity design, migrations, queries, unit of work, testing |
+
+### References/Ideas
+
+- Create a skill for generating new skill based on online documentation and repo scanning
+- See [antfu/skills](https://github.com/antfu/skills) for the following ideas
+  - Add vendor skills for a curated list of already existing skills
+  - Add skill/script for generating new skills based on their repo and only documentation
 
 ## License
 
