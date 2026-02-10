@@ -1,7 +1,7 @@
 {
   "name": "skills",
   "owner": {
-    "name": "Your Name"
+    "name": "Julian Wulff"
   },
   "metadata": {
     "description": "Curated skills and plugins for Claude Code"
@@ -13,7 +13,7 @@
       "description": "Opinionated development workflows — planning, debugging, TDD, code review, and collaboration patterns",
       "version": "0.1.0",
       "author": {
-        "name": "Your Name"
+        "name": "Julian Wulff"
       }
     },
     {
@@ -22,7 +22,7 @@
       "description": "MikroORM entity design, migrations, query patterns, and best practices",
       "version": "0.1.0",
       "author": {
-        "name": "Your Name"
+        "name": "Julian Wulff"
       }
     }
   ]
