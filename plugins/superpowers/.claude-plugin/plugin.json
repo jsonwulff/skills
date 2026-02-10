@@ -1,0 +1,11 @@
+{
+  "name": "superpowers",
+  "description": "Opinionated development workflows — planning, debugging, TDD, code review, and collaboration patterns",
+  "version": "0.1.0",
+  "author": {
+    "name": "Your Name"
+  },
+  "repository": "https://github.com/your-org/skills",
+  "license": "MIT",
+  "keywords": ["skills", "tdd", "debugging", "collaboration", "best-practices", "workflows"]
+}
