@@ -187,4 +187,4 @@ After all candidates are processed (or the user stops):
 
 ## Status Line (optional)
 
-See [docs/statusline-setup.md](../docs/statusline-setup.md) to display pending learning counts in your Claude Code status bar.
+See [docs/statusline-setup.md](docs/statusline-setup.md) to display pending learning counts in your Claude Code status bar.
