@@ -220,5 +220,72 @@ class TestMemoryStorePromote(unittest.TestCase):
         self.assertIn(self.entry_id.replace("SIG", "LRN"), content)
 
 
+class TestMemoryStoreCLI(unittest.TestCase):
+    def setUp(self):
+        self.tmpdir = tempfile.mkdtemp()
+        self.script = os.path.join(os.path.dirname(__file__), "memory_store.py")
+
+    def tearDown(self):
+        import shutil
+        shutil.rmtree(self.tmpdir)
+
+    def _run(self, *args):
+        import subprocess
+        env = os.environ.copy()
+        env["REFLECTIONS_DIR"] = self.tmpdir
+        result = subprocess.run(
+            ["python3", self.script] + list(args),
+            capture_output=True, text=True, env=env
+        )
+        return result
+
+    def test_cli_append(self):
+        entry_json = json.dumps({
+            "type": "failure", "status": "captured", "confidence": 1,
+            "source": {"hook": "test"}, "content": "cli test",
+            "context": "ctx", "session_id": "s1"
+        })
+        result = self._run("append", entry_json)
+        self.assertEqual(result.returncode, 0)
+        output = json.loads(result.stdout)
+        self.assertIn("id", output)
+
+    def test_cli_stats(self):
+        # Append something first
+        entry_json = json.dumps({
+            "type": "failure", "status": "captured", "confidence": 1,
+            "source": {"hook": "test"}, "content": "test",
+            "context": "ctx", "session_id": "s1"
+        })
+        self._run("append", entry_json)
+        result = self._run("stats")
+        self.assertEqual(result.returncode, 0)
+        output = json.loads(result.stdout)
+        self.assertEqual(output["total"], 1)
+
+    def test_cli_stats_statusline(self):
+        entry_json = json.dumps({
+            "type": "failure", "status": "captured", "confidence": 1,
+            "source": {"hook": "test"}, "content": "test",
+            "context": "ctx", "session_id": "s1"
+        })
+        self._run("append", entry_json)
+        result = self._run("stats", "--format", "statusline")
+        self.assertEqual(result.returncode, 0)
+        self.assertIn("1 pending", result.stdout)
+
+    def test_cli_query(self):
+        entry_json = json.dumps({
+            "type": "failure", "status": "captured", "confidence": 1,
+            "source": {"hook": "test"}, "content": "test",
+            "context": "ctx", "session_id": "s1"
+        })
+        self._run("append", entry_json)
+        result = self._run("query", "--status", "captured")
+        self.assertEqual(result.returncode, 0)
+        output = json.loads(result.stdout)
+        self.assertEqual(len(output), 1)
+
+
 if __name__ == "__main__":
     unittest.main()

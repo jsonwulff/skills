@@ -251,3 +251,76 @@ class MemoryStore:
             f.write(index_content)
 
         return updated
+
+
+def main():
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Memory store CLI for self-improvement signals")
+    parser.add_argument("command", choices=["append", "query", "get", "update", "stats", "archive"])
+
+    # Allow remaining args for subcommands
+    args, remaining = parser.parse_known_args()
+
+    base_dir = os.environ.get("REFLECTIONS_DIR", DEFAULT_BASE_DIR)
+    store = MemoryStore(base_dir=base_dir)
+
+    if args.command == "append":
+        if not remaining:
+            print("Error: append requires a JSON string argument", file=sys.stderr)
+            sys.exit(1)
+        entry = json.loads(remaining[0])
+        result = store.append(entry)
+        print(json.dumps(result))
+
+    elif args.command == "query":
+        qparser = argparse.ArgumentParser()
+        qparser.add_argument("--status")
+        qparser.add_argument("--type")
+        qparser.add_argument("--session")
+        qparser.add_argument("--since")
+        qparser.add_argument("--tags", nargs="*")
+        qargs = qparser.parse_args(remaining)
+        results = store.query(
+            status=qargs.status, entry_type=qargs.type,
+            session_id=qargs.session, since=qargs.since, tags=qargs.tags
+        )
+        print(json.dumps(results))
+
+    elif args.command == "get":
+        if not remaining:
+            print("Error: get requires an entry ID", file=sys.stderr)
+            sys.exit(1)
+        result = store.get(remaining[0])
+        print(json.dumps(result))
+
+    elif args.command == "update":
+        uparser = argparse.ArgumentParser()
+        uparser.add_argument("entry_id")
+        uparser.add_argument("fields_json")
+        uargs = uparser.parse_args(remaining)
+        fields = json.loads(uargs.fields_json)
+        result = store.update(uargs.entry_id, fields)
+        print(json.dumps(result))
+
+    elif args.command == "stats":
+        sparser = argparse.ArgumentParser()
+        sparser.add_argument("--format", dest="fmt")
+        sargs = sparser.parse_args(remaining)
+        result = store.stats(fmt=sargs.fmt)
+        if isinstance(result, str):
+            print(result)
+        else:
+            print(json.dumps(result))
+
+    elif args.command == "archive":
+        aparser = argparse.ArgumentParser()
+        aparser.add_argument("--days", type=int, default=14)
+        aparser.add_argument("--status")
+        aargs = aparser.parse_args(remaining)
+        removed = store.archive(days=aargs.days, status_filter=aargs.status)
+        print(json.dumps({"removed": removed}))
+
+
+if __name__ == "__main__":
+    main()
