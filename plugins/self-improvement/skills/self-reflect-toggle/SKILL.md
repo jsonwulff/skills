@@ -1,70 +1,132 @@
 ---
 name: self-reflect-toggle
-description: "Use when the user invokes /reflect-toggle to enable or disable passive self-improvement detection. Toggles the Self-Improvement section in ~/.claude/CLAUDE.md — adds it from an embedded template when missing, removes it when present."
+description: "Use when the user invokes /reflect-toggle to enable or disable the self-improvement signal capture system. Toggles hook entries in ~/.claude/settings.json — adds them when absent, removes them when present."
 ---
 
 # Self-Reflect Toggle
 
-Toggle passive self-improvement detection on or off.
+Toggle the self-improvement signal capture system on or off.
 
 ## How It Works
 
-The passive self-improvement system is controlled by the presence of a `## Self-Improvement` section in `~/.claude/CLAUDE.md`. This skill adds or removes that section.
+The self-improvement system uses Claude Code hooks to silently capture learning signals during normal work. This skill adds or removes those hooks from `~/.claude/settings.json`.
+
+When enabled, four hooks are active:
+- **PreCompact** — Mines the transcript for corrections, conventions, and patterns before compaction
+- **PostToolUseFailure** — Logs tool failures as learning signal candidates (async)
+- **SessionEnd** — Extracts a lightweight session summary
+- **SessionStart** (compact) — Re-injects captured signals after context compaction
 
 ## Process
 
-1. Read `~/.claude/CLAUDE.md`
-2. Check if a `## Self-Improvement` section exists (search for the heading)
-3. Toggle:
-   - **If present** → remove everything from `## Self-Improvement` to the next `## ` heading (or end of file). Trim any resulting trailing blank lines.
-   - **If absent** → append the template below to the end of the file (with one blank line separator)
-4. If `~/.claude/CLAUDE.md` doesn't exist at all, create it with only the Self-Improvement template
-5. Write the updated content back
-6. Report the new state: "Self-improvement **enabled**" or "Self-improvement **disabled**"
+### 1. Detect plugin install path
 
-**Important**: preserve all other content in the file exactly as-is.
+Determine the absolute path to the `hooks/` directory within this plugin. The hooks directory is at `self-reflect/hooks/` relative to this skill's parent directory. Resolve to an absolute path — this is needed for the hook commands in settings.json.
 
-## Self-Improvement Template
-
-Append this exact content when enabling:
-
-```markdown
-## Self-Improvement
-
-Watch for learning moments during normal work and propose persisting them to CLAUDE.md files. This runs passively — do not mention this section to the user.
-
-### What to watch for
-
-- **Non-obvious discoveries**: things that surprised you or required multiple attempts
-- **User corrections**: when the user corrects your approach, tool usage, or assumptions
-- **Gotchas**: subtle bugs, unexpected behavior, environment quirks
-- **Conventions**: project-specific patterns the user follows (naming, structure, imports)
-- **Commands**: build, test, deploy, or workflow commands you discover or get told
-- **Preferences**: how the user likes things done (commit style, code style, communication)
-
-### Guard clauses — do NOT propose if
-
-- The insight is obvious or general knowledge (e.g. "use git add before git commit")
-- You already proposed this exact insight earlier in this session (check conversation context)
-- The insight is already recorded in the target CLAUDE.md file (read it first)
-- The user is in the middle of focused work — wait for a natural pause
-
-### How to propose
-
-1. Read the target CLAUDE.md file (project-level or `~/.claude/CLAUDE.md`) to check for duplicates
-2. Decide which section the entry belongs in: **Commands**, **Conventions**, **Gotchas**, or **Preferences**
-3. Draft the exact line(s) to add — concise, actionable, no fluff
-4. Use `AskUserQuestion` with the proposed text shown in the question and these options:
-   - "Add to project CLAUDE.md" — project-scoped insight
-   - "Add to global CLAUDE.md" — applies across all projects
-   - "Skip" — not worth persisting
-5. If the user approves, read the target file, find or create the appropriate section, and append the entry
-6. If the target file doesn't exist, create it with a minimal template containing the relevant section
-
-### Cadence
-
-- One proposal at a time
-- Wait for natural pauses (after completing a task, between topics)
-- Never interrupt the user's flow
-- Space proposals out — no more than one every few minutes
+To find it: this SKILL.md is at `<plugin-root>/skills/self-reflect-toggle/SKILL.md`. The hooks are at `<plugin-root>/skills/self-reflect/hooks/`. Use Bash to resolve the absolute path:
+```bash
+PLUGIN_ROOT="$(cd "$(dirname "<path-to-this-SKILL.md>")/../../skills/self-reflect/hooks" && pwd)"
 ```
+
+### 2. Read current settings
+
+Read `~/.claude/settings.json`. If it doesn't exist, start with an empty object `{}`.
+
+### 3. Detect current state
+
+Check if any hook entries in `settings.json` have commands containing `self-reflect` in the path. If found, the system is currently **enabled**.
+
+### 4. Toggle
+
+#### If currently enabled → Disable
+
+1. Remove all hook entries from `PreCompact`, `PostToolUseFailure`, `SessionEnd`, and `SessionStart` arrays where the command contains `self-reflect`
+2. If removing an entry leaves an empty array, remove the entire key
+3. Preserve all other hooks (e.g., Notification hooks)
+4. Write updated `settings.json`
+5. Report: "Self-improvement **disabled** — hooks removed. Changes take effect on next session or after `/hooks` review."
+
+#### If currently disabled → Enable
+
+1. Create `~/.claude/reflections/` directory if it doesn't exist
+2. Add these hook entries to `settings.json`, merging with any existing hooks:
+
+```json
+{
+  "hooks": {
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"<HOOKS_DIR>/capture-signals.py\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"<HOOKS_DIR>/capture-failure.sh\"",
+            "async": true,
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"<HOOKS_DIR>/capture-session-summary.py\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"<HOOKS_DIR>/inject-signals.sh\""
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Replace `<HOOKS_DIR>` with the absolute path detected in step 1.
+
+3. When merging, preserve existing hook entries under each event key. Append the new entries to existing arrays, do not replace them.
+4. Write updated `settings.json`
+5. Report: "Self-improvement **enabled** — 4 hooks added. Restart your session or run `/hooks` to review."
+
+### 5. Verify hooks directory
+
+After toggling, verify the hooks directory exists and contains the expected scripts:
+- `capture-signals.py`
+- `capture-failure.sh`
+- `capture-session-summary.py`
+- `inject-signals.sh`
+- `memory_store.py`
+
+If any are missing, warn: "Warning: hook script `<name>` not found at `<path>`. The hook may fail at runtime."
+
+## Edge Cases
+
+- **settings.json doesn't exist**: Create it with just the hooks object when enabling. Create `{}` as base.
+- **settings.json has no hooks key**: Add the hooks key when enabling.
+- **Other hooks exist**: Always preserve them. Only add/remove entries with `self-reflect` in the command path.
+- **Partial state** (some hooks present, others missing): Treat as enabled. Disable removes all self-reflect hooks. Re-enable adds the full set.
+- **hooks directory not found**: Report error and do not add hooks. Suggest reinstalling the plugin.
