@@ -1,6 +1,7 @@
 ---
 name: self-reflect-toggle
-description: "Use when the user invokes /reflect-toggle to enable or disable the self-improvement signal capture system. Toggles hook entries in ~/.claude/settings.json — adds them when absent, removes them when present."
+description: "Enable or disable the self-improvement signal capture hooks."
+disable-model-invocation: true
 ---
 
 # Self-Reflect Toggle

@@ -1,6 +1,7 @@
 ---
 name: self-reflect
-description: "Use when the user invokes /reflect for a comprehensive review of learning moments. Reads hook-captured signals and the conversation, deduplicates, and proposes improvements one at a time (oldest first). Supports dual-scope: agent-side (CLAUDE.md) and project-side (.claude/improvements.md) proposals."
+description: "Review learning moments from this session and propose improvements to CLAUDE.md or .claude/improvements.md."
+disable-model-invocation: true
 ---
 
 # Self-Reflect
