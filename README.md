@@ -6,7 +6,7 @@ Curated skills and plugins for Claude Code.
 
 ### superpowers
 
-Opinionated development workflows — planning, debugging, TDD, code review, and collaboration patterns. Forked from [obra/superpowers](https://github.com/obra/superpowers).
+Opinionated development workflows — planning, debugging, TDD, code review, and collaboration patterns. Managed as a [git subtree](#working-with-the-superpowers-subtree) from [obra/superpowers](https://github.com/obra/superpowers).
 
 ### mikro-orm
 
@@ -81,6 +81,32 @@ npx skills add your-org/skills -l
 - See [antfu/skills](https://github.com/antfu/skills) for the following ideas
   - Add vendor skills for a curated list of already existing skills
   - Add skill/script for generating new skills based on their repo and only documentation
+
+## Working with the superpowers subtree
+
+The `plugins/superpowers/` directory is a git subtree of [obra/superpowers](https://github.com/obra/superpowers). The upstream remote is named `superpowers-upstream`.
+
+### Making local changes
+
+Edit files in `plugins/superpowers/` and commit normally — no special commands needed. Your changes are regular commits in this repo.
+
+### Pulling upstream changes
+
+```bash
+git subtree pull --prefix=plugins/superpowers superpowers-upstream main --squash
+```
+
+This fetches the latest from upstream and merges it with your local changes. If both sides touched the same files, you'll get a normal merge conflict to resolve.
+
+### Pushing changes back upstream
+
+If you want to contribute a change back to obra/superpowers:
+
+```bash
+git subtree push --prefix=plugins/superpowers superpowers-upstream my-feature-branch
+```
+
+This extracts commits that touch `plugins/superpowers/` and pushes them to a branch on the upstream remote (requires push access or a fork).
 
 ## License
 
