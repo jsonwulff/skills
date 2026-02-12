@@ -8,15 +8,6 @@
   },
   "plugins": [
     {
-      "name": "superpowers",
-      "source": "./plugins/superpowers",
-      "description": "Opinionated development workflows — planning, debugging, TDD, code review, and collaboration patterns",
-      "version": "0.1.0",
-      "author": {
-        "name": "Julian Wulff"
-      }
-    },
-    {
       "name": "mikro-orm",
       "source": "./plugins/mikro-orm",
       "description": "MikroORM entity design, migrations, query patterns, and best practices",
