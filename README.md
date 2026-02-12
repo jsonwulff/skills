@@ -68,6 +68,13 @@ npx skills add your-org/skills -l
 | ----------- | --------------------------------------------------------- |
 | `mikro-orm` | Entity design, migrations, queries, unit of work, testing |
 
+### Standalone skills
+
+| Skill                 | Description                                                   |
+| --------------------- | ------------------------------------------------------------- |
+| `self-reflect`        | End-of-session review — batch-proposes learnings to CLAUDE.md |
+| `self-reflect-toggle` | Toggle passive self-improvement detection on/off              |
+
 ### References/Ideas
 
 - Create a skill for generating new skill based on online documentation and repo scanning

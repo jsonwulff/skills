@@ -24,6 +24,15 @@
       "author": {
         "name": "Julian Wulff"
       }
+    },
+    {
+      "name": "self-improvement",
+      "source": "./plugins/self-improvement",
+      "description": "Session reflection and passive self-improvement for CLAUDE.md",
+      "version": "0.1.0",
+      "author": {
+        "name": "Julian Wulff"
+      }
     }
   ]
 }

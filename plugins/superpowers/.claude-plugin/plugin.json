@@ -7,5 +7,21 @@
   },
   "repository": "https://github.com/jsonwulff/skills",
   "license": "MIT",
-  "keywords": ["skills", "tdd", "debugging", "collaboration", "best-practices", "workflows"]
+  "keywords": ["skills", "tdd", "debugging", "collaboration", "best-practices", "workflows"],
+  "skills": [
+    "./skills/brainstorming",
+    "./skills/dispatching-parallel-agents",
+    "./skills/executing-plans",
+    "./skills/finishing-a-development-branch",
+    "./skills/receiving-code-review",
+    "./skills/requesting-code-review",
+    "./skills/subagent-driven-development",
+    "./skills/systematic-debugging",
+    "./skills/test-driven-development",
+    "./skills/using-git-worktrees",
+    "./skills/using-superpowers",
+    "./skills/verification-before-completion",
+    "./skills/writing-plans",
+    "./skills/writing-skills"
+  ]
 }

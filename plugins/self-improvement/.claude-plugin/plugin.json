@@ -1,0 +1,15 @@
+{
+  "name": "self-improvement",
+  "description": "Session reflection and passive self-improvement for CLAUDE.md",
+  "version": "0.1.0",
+  "author": {
+    "name": "Julian Wulff"
+  },
+  "repository": "https://github.com/jsonwulff/skills",
+  "license": "MIT",
+  "keywords": ["self-improvement", "reflection", "learning", "claude-md"],
+  "skills": [
+    "./skills/self-reflect",
+    "./skills/self-reflect-toggle"
+  ]
+}
