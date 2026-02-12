@@ -1,13 +1,13 @@
 {
   "name": "self-improvement",
-  "description": "Session reflection and passive self-improvement for CLAUDE.md",
-  "version": "0.1.0",
+  "description": "Memory-driven self-improvement system. Hooks capture learning signals silently during work. /reflect reviews signals and proposes dual-scope improvements (CLAUDE.md entries + project improvement proposals). /reflect-toggle enables or disables the hook-based capture system.",
+  "version": "0.2.0",
   "author": {
     "name": "Julian Wulff"
   },
   "repository": "https://github.com/jsonwulff/skills",
   "license": "MIT",
-  "keywords": ["self-improvement", "reflection", "learning", "claude-md"],
+  "keywords": ["self-improvement", "reflection", "learning", "claude-md", "hooks", "memory", "signals"],
   "skills": [
     "./skills/self-reflect",
     "./skills/self-reflect-toggle"
