@@ -19,8 +19,8 @@
     {
       "name": "self-improvement",
       "source": "./plugins/self-improvement",
-      "description": "Session reflection and passive self-improvement for CLAUDE.md",
-      "version": "0.1.0",
+      "description": "Memory-driven self-improvement system. Hooks capture learning signals silently during work. /reflect reviews signals and proposes dual-scope improvements.",
+      "version": "0.3.0",
       "author": {
         "name": "Julian Wulff"
       }
