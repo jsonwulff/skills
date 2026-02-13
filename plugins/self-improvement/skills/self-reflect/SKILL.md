@@ -26,8 +26,16 @@ Collect learning candidates from two sources:
    - **Gotchas**: subtle bugs, unexpected behavior, environment quirks, non-obvious fixes
    - **Preferences**: user workflow preferences, commit style, communication style
    - **Project friction**: navigation confusion, misleading file names, missing documentation
+   - **Agent friction**: excessive exploration to understand basic context, multiple subagent calls or 5+ tool calls to locate files/understand structure, wrong assumptions about the codebase. These signal missing documentation or project CLAUDE.md gaps.
 
-5. Merge Source A and Source B into a single candidate list
+**Source C — Agent self-audit:**
+5. Review your own behavior in this session:
+   - Did you need many tool calls to understand the repo structure? → missing project CLAUDE.md
+   - Did you make wrong assumptions about where files live or how things work? → undocumented convention
+   - Did you need to explore broadly before acting? → missing context that a CLAUDE.md entry would solve
+   - Does a project CLAUDE.md exist? If not, that is almost always worth proposing.
+
+6. Merge Sources A, B, and C into a single candidate list
 
 ### 2. Deduplicate
 
@@ -49,7 +57,7 @@ For each remaining candidate, determine:
 - **Scope**: global (applies across all projects) vs project-specific
 - **Type**: agent-side (teaches Claude how to work) vs project-side (suggests the project should change)
 - **Category**:
-  - Agent-side: `Commands`, `Conventions`, `Gotchas`, `Preferences`
+  - Agent-side: `Commands`, `Conventions`, `Gotchas`, `Preferences`, `Agent Friction`
   - Project-side: `Documentation`, `Naming`, `Project Structure`, `Configuration`, `Test Structure`
 - **Confidence**: Boost signals that recur across multiple sessions:
   - 1 occurrence → low
